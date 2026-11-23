@@ -58,7 +58,7 @@
     { type: "warn", icon: "△", title: "Port congestion alert", detail: "Port of Los Angeles · Berth delay +18h", time: "2 min ago", tag: "ELEVATED" },
     { type: "ok", icon: "↗", title: "Shipment delivered", detail: "AG-284912 · Rotterdam → Hamburg", time: "8 min ago", tag: "ON TIME" },
     { type: "info", icon: "⌖", title: "Fleet reroute initiated", detail: "Lane SG-DXB · 12 units redirected", time: "14 min ago", tag: "AUTO" },
-    { type: "warn", icon: "◷", title: "Weather watch", detail: "South China Sea · 6 active shipments", time: "21 min ago", tag: "MONITORING" },
+    { type: "warn", icon: "◷", title: "Simulated weather watch", detail: "South China Sea · 6 active shipments", time: "21 min ago", tag: "MONITORING" },
     { type: "ok", icon: "✓", title: "Customs cleared", detail: "AG-284771 · Singapore gateway", time: "27 min ago", tag: "CLEARED" }
   ];
   const anomalies = [
@@ -583,10 +583,9 @@
     $("#mobileMenu").addEventListener("click", () => $("#sidebar").classList.toggle("open"));
     $("#refreshButton").addEventListener("click", () => {
       updateClock();
-      $("#lastSync").textContent = "just now";
-      showToast("Network telemetry and facility data are up to date.");
+      showToast("Illustrative operations data refreshed; current weather refresh requested.");
     });
-    $("#manifestRefresh").addEventListener("click", () => { $("#manifestSync").textContent = "just now"; renderShipments(); showToast("Shipment manifest synchronized."); });
+    $("#manifestRefresh").addEventListener("click", () => { $("#manifestSync").textContent = "On-device"; renderShipments(); showToast("Simulated shipment data refreshed."); });
     $("#simulateButton").addEventListener("click", runSimulation);
     $("#riskScenario").addEventListener("click", runSimulation);
     $("#exportButton").addEventListener("click", exportCsv);
@@ -697,7 +696,6 @@
     window.setInterval(updateClock, 1000);
     window.setInterval(() => {
       state.streamTick++;
-      $("#lastSync").textContent = "just now";
       if (state.view === "overview") drawThroughput();
       if (state.view === "risk") drawRiskChart();
     }, 5000);
