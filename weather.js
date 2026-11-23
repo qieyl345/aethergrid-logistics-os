@@ -42,16 +42,20 @@
   function parseCurrent(hub, response) {
     const current = response?.current;
     const time = typeof current?.time === "string" ? current.time : "";
-    const temperature = Number(current?.temperature_2m);
-    const apparentTemperature = Number(current?.apparent_temperature);
-    const humidity = Number(current?.relative_humidity_2m);
-    const windSpeed = Number(current?.wind_speed_10m);
-    const windDegrees = Number(current?.wind_direction_10m);
-    const weatherCode = Number(current?.weather_code);
-    if (!time || !Number.isFinite(Date.parse(`${time}Z`))
-      || !Number.isFinite(temperature) || !Number.isFinite(apparentTemperature)
-      || !Number.isFinite(humidity) || !Number.isFinite(windSpeed)
-      || !Number.isFinite(windDegrees) || !weatherCodes.has(weatherCode)) {
+    const providerTime = time.endsWith("Z") || /[+-]\d{2}:\d{2}$/.test(time) ? time : `${time}Z`;
+    const temperature = current?.temperature_2m;
+    const apparentTemperature = current?.apparent_temperature;
+    const humidity = current?.relative_humidity_2m;
+    const windSpeed = current?.wind_speed_10m;
+    const windDegrees = current?.wind_direction_10m;
+    const weatherCode = current?.weather_code;
+    if (!time || !Number.isFinite(Date.parse(providerTime))
+      || typeof temperature !== "number" || !Number.isFinite(temperature)
+      || typeof apparentTemperature !== "number" || !Number.isFinite(apparentTemperature)
+      || typeof humidity !== "number" || !Number.isFinite(humidity) || humidity < 0 || humidity > 100
+      || typeof windSpeed !== "number" || !Number.isFinite(windSpeed) || windSpeed < 0
+      || typeof windDegrees !== "number" || !Number.isFinite(windDegrees) || windDegrees < 0 || windDegrees > 360
+      || !Number.isInteger(weatherCode) || !weatherCodes.has(weatherCode)) {
       return { hub, current: null, error: "Provider response was incomplete." };
     }
     return {
