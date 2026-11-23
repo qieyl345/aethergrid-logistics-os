@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101616">
+  <meta name="description" content="AetherGrid logistics command center — live supply-chain visibility and operations control.">
+  <title>AetherGrid | Logistics OS</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#overview" aria-label="AetherGrid home">
+        <span class="brand-mark"><span></span><span></span><span></span><span></span></span>
+        <span><strong>AETHER<span>GRID</span></strong><small>LOGISTICS OS <i>v2.8.4</i></small></span>
+      </a>
+      <div class="workspace-label">WORKSPACE <span class="live-dot"></span></div>
+      <nav class="primary-nav" aria-label="Main navigation">
+        <button class="nav-item active" data-view="overview"><span class="nav-icon">◫</span>Command center <kbd>01</kbd></button>
+        <button class="nav-item" data-view="routes"><span class="nav-icon">⌁</span>Global routes <kbd>02</kbd></button>
+        <button class="nav-item" data-view="warehouse"><span class="nav-icon">▦</span>Warehouse twin <kbd>03</kbd></button>
+        <button class="nav-item" data-view="risk"><span class="nav-icon">⌁</span>Risk intelligence <kbd>04</kbd><b class="nav-alert">3</b></button>
+        <button class="nav-item" data-view="shipments"><span class="nav-icon">▤</span>Shipment manifest <kbd>05</kbd></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="system-health"><span class="health-icon">⌁</span><div><strong>All systems nominal</strong><small>Last sync <span id="lastSync">just now</span></small></div><span class="health-pulse"></span></div>
+        <button class="profile-button"><span class="avatar">AC</span><span><strong>Alex Chen</strong><small>Operations lead</small></span><span class="profile-more">···</span></button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-mark"><span></span><span></span><span></span><span></span></span><strong>AETHER<span>GRID</span></strong></div>
+        <div class="breadcrumb"><span>OPERATIONS</span><b>/</b><strong id="breadcrumbTitle">COMMAND CENTER</strong></div>
+        <div class="topbar-actions">
+          <div class="connection"><span class="live-dot"></span>LIVE <span class="connection-divider"></span><span id="clock">--:--:-- UTC</span></div>
+          <button class="icon-button alert-button" id="alertsButton" aria-label="View alerts">♧<i></i></button>
+          <button class="command-trigger" id="commandTrigger"><span>⌕</span> Quick command <kbd>⌘ K</kbd></button>
+          <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <section class="view-panel active" id="view-overview">
+          <div class="page-heading">
+            <div><div class="eyebrow"><span class="eyebrow-line"></span> MONDAY, NOVEMBER 23, 2026 <span class="heading-separator">/</span> SHIFT A</div><h1>Command center<span class="heading-period">.</span></h1><p>Your network is moving. Here's the pulse across 14 active regions.</p></div>
+            <div class="heading-actions"><button class="button button-quiet" id="refreshButton"><span>↻</span> Refresh data</button><button class="button button-primary" id="simulateButton"><span>⌁</span> Run scenario</button></div>
+          </div>
+          <div class="metric-grid">
+            <article class="metric-card"><div class="metric-top"><span>ACTIVE SHIPMENTS</span><span class="metric-symbol">↗</span></div><div class="metric-main"><strong id="activeShipments">2,481</strong><span class="metric-delta positive">↑ 12.8%</span></div><div class="metric-foot"><span>vs. last 24 hours</span><span class="mini-bars" data-bars="4,7,5,8,6,9,7,10,8,12,9,13"></span></div></article>
+            <article class="metric-card"><div class="metric-top"><span>ON-TIME DELIVERY</span><span class="metric-symbol">◷</span></div><div class="metric-main"><strong>96.4<span class="metric-unit">%</span></strong><span class="metric-delta positive">↑ 2.1%</span></div><div class="metric-foot"><span>Target 95.0%</span><span class="metric-track"><i style="width:96.4%"></i></span></div></article>
+            <article class="metric-card"><div class="metric-top"><span>NETWORK EXPOSURE</span><span class="metric-symbol warning-symbol">△</span></div><div class="metric-main"><strong id="exposureScore">18.2<span class="metric-unit">%</span></strong><span class="metric-delta negative" id="exposureDelta">↑ 4.3%</span></div><div class="metric-foot"><span>Moderate · 3 elevated lanes</span><span class="exposure-track"><i style="width:38%"></i></span></div></article>
+            <article class="metric-card"><div class="metric-top"><span>FLEET UTILIZATION</span><span class="metric-symbol">⌖</span></div><div class="metric-main"><strong>84.7<span class="metric-unit">%</span></strong><span class="metric-delta neutral">— 0.4%</span></div><div class="metric-foot"><span>1,204 units in motion</span><span class="fleet-dots"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></div></article>
+          </div>
+
+          <div class="overview-grid">
+            <article class="panel map-panel">
+              <div class="panel-heading"><div><div class="panel-kicker">NETWORK OVERVIEW</div><h2>Global route intelligence</h2></div><button class="text-action" data-navigate="routes">Explore network <span>↗</span></button></div>
+              <div class="map-wrap" id="overviewMap"><svg class="world-map" viewBox="0 0 760 330" role="img" aria-label="Global map showing active shipping routes"></svg><div class="map-tooltip" id="mapTooltip"></div>
+                <div class="map-legend"><span><i class="legend-line"></i> Active lane</span><span><i class="legend-line risk-line"></i> Elevated risk</span><span><i class="legend-dot"></i> Hub</span></div>
+                <div class="map-live-tag"><span class="live-dot"></span> NETWORK LIVE</div>
+              </div>
+              <div class="map-footer"><div><span class="tiny-label">ACTIVE LANES</span><strong>248</strong></div><div><span class="tiny-label">PORTS CONNECTED</span><strong>36</strong></div><div><span class="tiny-label">IN-TRANSIT VALUE</span><strong>$84.2M</strong></div><button class="map-expand" data-navigate="routes" aria-label="Open global routes">↗</button></div>
+            </article>
+            <article class="panel activity-panel">
+              <div class="panel-heading"><div><div class="panel-kicker">LIVE FEED <span class="live-dot"></span></div><h2>Network activity</h2></div><button class="more-button" aria-label="More activity options">···</button></div>
+              <div class="activity-list" id="activityList"></div>
+              <button class="activity-link" data-navigate="risk">View all activity <span>→</span></button>
+            </article>
+          </div>
+          <div class="lower-grid">
+            <article class="panel throughput-panel"><div class="panel-heading"><div><div class="panel-kicker">THROUGHPUT ANALYTICS</div><h2>Volume moving through your network</h2></div><div class="chart-controls"><span class="chart-legend"><i></i> Shipments</span><select id="throughputRange" aria-label="Throughput chart range"><option value="24">Last 24 hours</option><option value="7">Last 7 days</option></select></div></div><div class="chart-stat"><strong id="throughputTotal">18,426</strong><span>units processed</span><span class="metric-delta positive">↑ 8.6%</span></div><div class="chart-area"><canvas id="throughputChart" aria-label="Shipment throughput chart" role="img"></canvas></div></article>
+            <article class="panel warehouse-card"><div class="panel-heading"><div><div class="panel-kicker">FACILITY SPOTLIGHT</div><h2>Singapore · SG-04</h2></div><span class="status-chip">OPTIMAL</span></div><div class="warehouse-visual" id="miniWarehouse"></div><div class="warehouse-stats"><div><span>OCCUPANCY</span><strong>78.2%</strong></div><div><span>ACTIVE AMRs</span><strong>24 <i class="green-dot"></i></strong></div><div><span>PICK RATE</span><strong>142<span>/hr</span></strong></div></div><button class="facility-link" data-navigate="warehouse">Open digital twin <span>↗</span></button></article>
+          </div>
+        </section>
+
+        <section class="view-panel" id="view-routes">
+          <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> NETWORK INTELLIGENCE <span class="heading-separator">/</span> LIVE TELEMETRY</div><h1>Global routes<span class="heading-period">.</span></h1><p>Track active freight corridors, hub performance and emerging lane risk.</p></div><div class="heading-actions"><button class="button button-quiet" id="routeLayers">⌗ Layers <span class="caret">⌄</span></button><button class="button button-primary" id="routeRecenter">◎ Recenter</button></div></div>
+          <div class="route-stats"><div><span>ACTIVE CORRIDORS</span><strong>248</strong><i>+12 today</i></div><div><span>IN-TRANSIT SHIPMENTS</span><strong>2,481</strong><i>Across 14 regions</i></div><div><span>AVERAGE TRANSIT</span><strong>18.6 <small>days</small></strong><i>↓ 1.2 days this month</i></div><div><span>NETWORK RELIABILITY</span><strong>96.4<small>%</small></strong><i>Above target</i></div></div>
+          <article class="panel full-map-panel"><div class="panel-heading"><div><div class="panel-kicker">GLOBAL NETWORK · 36 HUBS</div><h2>Freight corridors & live fleet telemetry</h2></div><div class="map-tools"><button class="map-filter active" data-map-filter="all">All lanes</button><button class="map-filter" data-map-filter="ocean">Ocean</button><button class="map-filter" data-map-filter="air">Air</button><button class="map-filter" data-map-filter="risk">At risk <i class="risk-pip"></i></button></div></div><div class="full-map-wrap"><svg class="world-map" viewBox="0 0 1000 440" role="img" aria-label="Interactive global freight routes map"></svg><div class="map-tooltip"></div><div class="map-live-tag"><span class="live-dot"></span> LIVE TELEMETRY <span class="map-tooltip-separator"></span> 1,204 UNITS</div><div class="map-legend"><span><i class="legend-line"></i> Ocean freight</span><span><i class="legend-line air-line"></i> Air freight</span><span><i class="legend-line risk-line"></i> Elevated risk</span><span><i class="legend-dot"></i> Distribution hub</span></div><div class="zoom-controls"><button aria-label="Zoom in">+</button><button aria-label="Zoom out">−</button></div></div></article>
+          <div class="routes-bottom"><article class="panel lane-panel"><div class="panel-heading"><div><div class="panel-kicker">CORRIDOR PERFORMANCE</div><h2>Top active lanes</h2></div><button class="text-action" id="allLanes">View all <span>→</span></button></div><div class="lane-list" id="laneList"></div></article><article class="panel hubs-panel"><div class="panel-heading"><div><div class="panel-kicker">HUB STATUS</div><h2>Regional distribution</h2></div><span class="tiny-label">36 ACTIVE</span></div><div id="hubList"></div></article></div>
+        </section>
+
+        <section class="view-panel" id="view-warehouse">
+          <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> SINGAPORE DISTRIBUTION CENTER <span class="heading-separator">/</span> SG-04</div><h1>Warehouse twin<span class="heading-period">.</span></h1><p>Live facility operations · Singapore Logistics Park · Updated seconds ago</p></div><div class="heading-actions"><button class="button button-quiet" id="warehouseReset">↻ Reset view</button><button class="button button-primary" id="pauseRobots">Ⅱ Pause AMRs</button></div></div>
+          <div class="facility-overview"><div class="facility-title"><span class="facility-icon">▦</span><div><strong>Singapore Distribution Center</strong><small>SG-04 <i class="separator-dot"></i> 82,400 m² <i class="separator-dot"></i> 3 shifts</small></div><span class="status-chip">OPERATIONAL</span></div><div class="facility-kpis"><div><span>OCCUPANCY</span><strong>78.2%</strong><div class="kpi-track"><i style="width:78%"></i></div></div><div><span>ACTIVE AMRs</span><strong id="amrCount">24 <small>/ 28</small></strong><div class="robot-indicators"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div><div><span>THROUGHPUT</span><strong>1,842 <small>units/hr</small></strong><div class="kpi-trend">↑ 6.2%</div></div><div><span>OPEN TASKS</span><strong id="openTasks">36</strong><div class="kpi-trend muted">12 picking · 24 transfer</div></div></div></div>
+          <div class="warehouse-layout"><article class="panel twin-panel"><div class="panel-heading"><div><div class="panel-kicker">FLOOR PLAN · LIVE</div><h2>Zone occupancy & AMR positions</h2></div><div class="twin-controls"><button id="gridToggle" class="twin-control active">▦ Grid</button><button id="heatToggle" class="twin-control">◉ Heatmap</button><button class="twin-control" id="twinZoom">＋</button></div></div><div class="twin-stage"><div class="twin-labels"><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span><span>07</span></div><div class="warehouse-grid" id="warehouseGrid" aria-label="Interactive warehouse floor grid"></div><div class="twin-scale"><span>LOW OCCUPANCY</span><i></i><span>HIGH</span></div></div><div class="twin-footer"><span><i class="legend-dot"></i> AMR unit</span><span><i class="zone-swatch"></i> Storage zone</span><span><i class="dock-swatch"></i> Dock / staging</span><span class="twin-updated"><span class="live-dot"></span> Live positions</span></div></article><aside class="panel robot-panel"><div class="panel-heading"><div><div class="panel-kicker">FLEET MONITOR</div><h2>AMR units <span class="fleet-count">24</span></h2></div><button class="more-button">···</button></div><div class="robot-summary"><strong>24 <small>/ 28</small></strong><span>units active</span><div class="robot-summary-track"><i></i></div></div><div class="robot-list" id="robotList"></div><button class="robot-all" id="allRobots">View all 28 units <span>→</span></button></aside></div>
+          <article class="panel task-panel"><div class="panel-heading"><div><div class="panel-kicker">TASK QUEUE</div><h2>Active facility operations</h2></div><div class="task-filters"><button class="active" data-task-filter="all">All <b>36</b></button><button data-task-filter="pick">Picking <b>12</b></button><button data-task-filter="transfer">Transfer <b>24</b></button></div></div><div class="table-wrap"><table><thead><tr><th>TASK ID</th><th>TYPE</th><th>LOCATION</th><th>ASSIGNED UNIT</th><th>PROGRESS</th><th>STATUS</th></tr></thead><tbody id="taskTable"></tbody></table></div></article>
+        </section>
+
+        <section class="view-panel" id="view-risk">
+          <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> PREDICTIVE OPERATIONS <span class="heading-separator">/</span> 3 SIGNALS NEED ATTENTION</div><h1>Risk intelligence<span class="heading-period">.</span></h1><p>Identify disruptions early. See the downstream impact before it happens.</p></div><div class="heading-actions"><button class="button button-quiet" id="riskWindow">⏱ 24-hour window <span class="caret">⌄</span></button><button class="button button-primary" id="riskScenario">⌁ Simulate disruption</button></div></div>
+          <div class="risk-overview"><div class="risk-score-card"><div class="risk-score-heading"><span>NETWORK RISK INDEX</span><span class="score-change" id="riskScoreChange">↑ 4.3%</span></div><div class="risk-score-main"><strong id="riskIndex">18.2</strong><span>/ 100</span><span class="risk-level">MODERATE</span></div><div class="risk-meter"><i></i><span></span></div><div class="risk-scale"><span>LOW</span><span>MODERATE</span><span>HIGH</span><span>CRITICAL</span></div><div class="risk-score-foot" id="riskScoreFoot">Network exposure is <strong>4.3% higher</strong> than the 7-day baseline.</div></div><div class="risk-stat"><span>OPEN ANOMALIES</span><strong id="anomalyCount">03</strong><i class="risk-pip"></i><small id="anomalySummary">2 require action</small></div><div class="risk-stat"><span>VALUE AT RISK</span><strong id="valueAtRisk">$2.4<span>M</span></strong><i class="risk-change" id="valueAtRiskChange">↑ 8.2%</i><small id="valueAtRiskSummary">Across 3 flagged lanes</small></div><div class="risk-stat"><span>RISK MITIGATED</span><strong>74<span>%</span></strong><i class="mitigated-line"></i><small>This quarter</small></div></div>
+          <article class="panel risk-chart-panel"><div class="panel-heading"><div><div class="panel-kicker">ANOMALY SIGNALS</div><h2>Risk signal velocity</h2></div><div class="signal-legend"><span><i class="signal-a"></i> Predicted</span><span><i class="signal-b"></i> Observed</span><span><i class="signal-threshold"></i> Action threshold</span></div></div><div class="signal-chart-wrap"><canvas id="riskChart" role="img" aria-label="Predicted and observed risk signal velocity chart"></canvas></div><div class="chart-axis-caption"><span>00:00</span><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>NOW</span></div></article>
+          <div class="risk-bottom"><article class="panel anomalies-panel"><div class="panel-heading"><div><div class="panel-kicker">DETECTED SIGNALS</div><h2>Active anomalies <span class="heading-count">03</span></h2></div><button class="text-action" id="allAnomalies">View history <span>→</span></button></div><div class="anomaly-list" id="anomalyList"></div></article><article class="panel exposure-panel"><div class="panel-heading"><div><div class="panel-kicker">EXPOSURE DISTRIBUTION</div><h2>Risk by region</h2></div><button class="more-button">···</button></div><div class="exposure-list" id="exposureList"></div><div class="exposure-footer"><span>COMBINED NETWORK EXPOSURE</span><strong id="combinedExposure">18.2%</strong></div></article></div>
+        </section>
+
+        <section class="view-panel" id="view-shipments">
+          <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> FULFILLMENT OPERATIONS <span class="heading-separator">/</span> MANIFEST</div><h1>Shipment manifest<span class="heading-period">.</span></h1><p>Search, filter and inspect every shipment moving across your network.</p></div><div class="heading-actions"><button class="button button-quiet" id="manifestRefresh">↻ Sync manifest</button><button class="button button-primary" id="exportButton">↓ Export CSV</button></div></div>
+          <div class="manifest-summary"><div><span>ALL SHIPMENTS</span><strong id="manifestTotal">524</strong></div><div><span>IN TRANSIT</span><strong class="summary-green">318</strong></div><div><span>AT RISK</span><strong class="summary-amber">24</strong></div><div><span>DELIVERED TODAY</span><strong>86</strong></div><div class="manifest-summary-end"><span class="live-dot"></span> Synced <span id="manifestSync">just now</span></div></div>
+          <article class="panel manifest-panel"><div class="manifest-toolbar"><div class="manifest-tabs"><button class="active" data-shipment-filter="all">All shipments <b id="allCount">524</b></button><button data-shipment-filter="transit">In transit <b>318</b></button><button data-shipment-filter="risk">At risk <b>24</b></button><button data-shipment-filter="delivered">Delivered <b>86</b></button></div><div class="manifest-tools"><label class="manifest-search"><span>⌕</span><input id="shipmentSearch" type="search" placeholder="Search ID, carrier, destination…"><kbd>/</kbd></label><button class="filter-button" id="filterButton">☷ Filters <i id="filterBadge"></i></button><select id="shipmentSort" aria-label="Sort shipments"><option value="eta">Sort: ETA</option><option value="risk">Sort: Risk level</option><option value="value">Sort: Value</option></select></div></div>
+            <div class="filter-row" id="filterRow"><label>Status <select id="statusFilter"><option value="all">All statuses</option><option value="In transit">In transit</option><option value="At risk">At risk</option><option value="Delivered">Delivered</option><option value="Customs hold">Customs hold</option><option value="Scheduled">Scheduled</option></select></label><label>Mode <select id="modeFilter"><option value="all">All modes</option><option value="Ocean">Ocean</option><option value="Air">Air</option><option value="Rail">Rail</option><option value="Road">Road</option></select></label><label>Region <select id="regionFilter"><option value="all">All regions</option><option value="APAC">APAC</option><option value="EMEA">EMEA</option><option value="AMER">AMER</option></select></label><button id="clearFilters">Clear filters</button></div>
+            <div class="table-wrap manifest-table-wrap"><table class="manifest-table"><thead><tr><th><input type="checkbox" id="selectAll" aria-label="Select all shipments"></th><th>SHIPMENT <span class="sort-mark">↕</span></th><th>ORIGIN → DESTINATION</th><th>CARRIER / MODE</th><th>ETA <span class="sort-mark">↕</span></th><th>STATUS</th><th>RISK</th><th>VALUE <span class="sort-mark">↕</span></th><th></th></tr></thead><tbody id="shipmentRows"></tbody></table><div class="empty-state" id="emptyState" hidden><span>⌕</span><strong>No shipments match your filters</strong><p>Try adjusting your search or clearing the active filters.</p><button class="button button-quiet" id="emptyClear">Clear all filters</button></div></div>
+            <div class="manifest-footer"><span id="resultCount">Showing 1–12 of 524 shipments</span><div class="pagination"><button id="prevPage" aria-label="Previous page">‹</button><span id="pageNumbers"></span><button id="nextPage" aria-label="Next page">›</button></div><label>Rows <select id="pageSize"><option>12</option><option>24</option><option>48</option></select></label></div>
+          </article>
+        </section>
+      </div>
+      <footer class="app-footer"><span>◈ AETHERGRID LOGISTICS OS</span><span>ALL SYSTEMS OPERATIONAL <i class="live-dot"></i></span><span>DATA REFRESHED <b id="footerTime">00:00:00</b></span></footer>
+    </main>
+  </div>
+  <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+  <div class="modal-backdrop" id="modalBackdrop" hidden><section class="command-modal" role="dialog" aria-modal="true" aria-labelledby="commandTitle"><div class="command-search"><span>⌕</span><input id="commandInput" type="search" placeholder="Search commands, shipments, modules…" autocomplete="off"><kbd>ESC</kbd></div><h2 id="commandTitle">QUICK NAVIGATION</h2><div class="command-results" id="commandResults"></div><div class="command-hint"><span>↑↓ to navigate</span><span><kbd>↵</kbd> to select</span><span><kbd>ESC</kbd> to close</span></div></section></div>
+  <aside class="detail-drawer" id="detailDrawer" aria-label="Shipment details" aria-hidden="true"><div class="drawer-header"><div><div class="panel-kicker">SHIPMENT DETAIL</div><h2 id="drawerTitle">AG-000000</h2></div><button id="closeDrawer" aria-label="Close details">×</button></div><div id="drawerContent"></div></aside>
+</body>
+</html>
